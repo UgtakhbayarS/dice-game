@@ -5,15 +5,7 @@ var scores = [0, 0];
 //toglogchiin eeljindee tsugluulgh onoo.
 var roundScore = 0;
 //shoonii buusan too 1 - 6 random uusgej ugnu.
-
-document.getElementById("score-0").textContent = "0";
-document.getElementById("score-1").textContent = "0";
-
-document.getElementById("current-0").textContent = "0";
-document.getElementById("current-1").textContent = "0";
-
 var diceDom = document.querySelector(".dice");
-diceDom.style.display = "none";
 
 //shoog shideh event listener
 document.querySelector(".btn-roll").addEventListener("click", function() {
@@ -29,12 +21,7 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     roundScore = roundScore + diceNumber;
     document.getElementById("current-" + activePlayer).textContent = roundScore;
   } else {
-    document.getElementById("current-" + activePlayer).textContent = 0;
-    activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
-    //ulaan tseg shiljuuleh
-    document.querySelector(".player-0-panel").classList.toggle("active");
-    document.querySelector(".player-1-panel").classList.toggle("active");
-    diceDom.style.display = "none";
+    switchToNextPlayer();
     // if (activePlayer === 0) {
     //   activePlayer = 1;
     // } else {
@@ -42,3 +29,44 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     // }
   }
 });
+//Hold button score function
+document.querySelector(".btn-hold").addEventListener("click", function() {
+  //this player score adding to global score
+  scores[activePlayer] += roundScore;
+  document.getElementById("score-" + activePlayer).textContent =
+    scores[activePlayer];
+  if (scores[activePlayer] >= 20) {
+    document.getElementById("name-" + activePlayer).textContent = "WINNER !!!";
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.add("winner");
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.remove("active");
+  } else {
+    switchToNextPlayer();
+  }
+});
+
+function switchToNextPlayer() {
+  roundScore = 0;
+  document.getElementById("current-" + activePlayer).textContent = "0";
+
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+  //ulaan tseg shiljuuleh
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+  diceDom.style.display = "none";
+}
+//new game function
+document.querySelector(".btn-new").addEventListener("click", function() {
+  scores = [0, 0];
+});
+function init() {
+  document.getElementById("score-0").textContent = "0";
+  document.getElementById("score-1").textContent = "0";
+
+  document.getElementById("current-0").textContent = "0";
+  document.getElementById("current-1").textContent = "0";
+  diceDom.style.display = "none";
+}
